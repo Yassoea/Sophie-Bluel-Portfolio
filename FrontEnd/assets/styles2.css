@@ -1,0 +1,132 @@
+
+.form {
+	width: 50%;
+	margin: auto;
+}
+.form > * {
+	text-align: center;
+	
+}
+.form h2{
+	margin-bottom: 20px;
+}
+.form form {
+	text-align: left;
+	margin-top:30px;
+	display: flex;
+	flex-direction: column;
+}
+
+.form input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.form select {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.form label {
+	margin: 2em 0 1em 0;
+}
+.form textarea {
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+nav ul {
+	display: flex;
+	align-items: center;
+	list-style-type: none;
+	gap: 25px;
+}
+ul a{
+    text-decoration: none;
+    color: black;
+}
+ul a:hover{
+    font-weight: bold;
+}
+nav li {
+	padding: 0 10px;
+	font-size: 1.2em;
+    
+	
+}
+li img{
+	width: 50%;
+	margin-top: 5px;
+	height: auto;
+}
+li:hover {
+	color: #B1663C;
+}
+header {
+	display: flex;
+	justify-content: space-between;
+	margin: 50px 0
+}
+h1{
+	display: flex;
+	flex-direction: column;
+	font-family: 'Syne';
+	font-size: 22px;
+	font-weight: 800;
+	color: #B1663C
+}
+
+h1 > span {
+	font-family: 'Work Sans';
+	font-size:10px;
+	letter-spacing: 0.1em;
+;
+}
+h2{
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 30px;
+	color: #1D6154
+}
+body {
+	max-width: 1140px;
+	margin:auto;
+	font-family: 'Work Sans' ;
+	font-size: 14px;
+    background-color: #fffef8;
+}
+input[type="submit"]{
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	margin : 2em auto ;
+	width: 179px;
+    height: 36px;
+	text-align: center;
+	border-radius: 60px ;
+}
+p a{
+    color: #3D3D3D;
+}
+footer {
+    background-color: rgb(255, 255, 255); 
+    width: 100%; 
+    position: relative; 
+    margin-top: 80px; 
+    padding: 10px; 
+}
+
+footer nav ul {
+    display: flex;
+    justify-content: flex-end; 
+    padding-right: 5%; /* Ajustez cet espacement selon vos besoins */
+}
+input[type="submit"]:hover{
+	background-color: #0E2F28;
+	cursor: pointer;
+}
