@@ -48,6 +48,16 @@ async function getWorks(filter) {
   
     document.querySelector(".gallery").append(figure);
   }
+  // Affichage du filtre actif et des "figures" associées
+function toggleFilter(event) {
+  const container = document.querySelector(".div-container");
+  Array.from(container.children).forEach((child) =>
+    child.classList.remove("active-filter")
+  );
+  event.target.classList.add("active-filter");
+}
+
+document.querySelector(".tous").addEventListener("click", () => getWorks());
 
   //Recuperation des categories depuis l'API
 async function getCategories() {
