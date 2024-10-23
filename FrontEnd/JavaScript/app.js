@@ -1,3 +1,8 @@
+const url = "http://localhost:5678/api";
+
+getWorks();
+getCategories();
+
 async function getWorks(filter) {
     document.querySelector(".gallery").innerHTML = "";
     document.querySelector(".modal-gallery").innerHTML = "";
@@ -37,4 +42,34 @@ async function getWorks(filter) {
                       <figcaption>${data.title}</figcaption>`;
   
     document.querySelector(".gallery").append(figure);
+  }
+
+  //Recuperation des categories depuis l'API
+async function getCategories() {
+    try {
+      const response = await fetch(`${url}/categories`);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+  
+      const json = await response.json();
+      for (let i = 0; i < json.length; i++) {
+        setFilter(json[i]);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+  
+  // Ajout des eventListeners aux filtres
+  function setFilter(data) {
+    const div = document.createElement("div");
+    div.className = data.id;
+    div.addEventListener("click", () => getWorks(data.id));
+    div.addEventListener("click", (event) => toggleFilter(event));
+    document
+      .querySelector(".tous")
+      .addEventListener("click", (event) => toggleFilter(event));
+    div.innerHTML = `${data.name}`;
+    document.querySelector(".div-container").append(div);
   }
