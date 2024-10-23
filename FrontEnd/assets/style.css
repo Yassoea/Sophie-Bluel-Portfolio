@@ -221,3 +221,8 @@ footer nav ul {
 	padding-right: 5%;
 
 }
+.active-filter {
+    background-color: #1D6154; 
+    color: white; 
+   
+}
