@@ -1,4 +1,6 @@
-
+html{
+	max-width: 1440px;
+}
 body {
 	line-height: 1;
 }
@@ -26,6 +28,7 @@ table {
 body {
 	max-width: 1140px;
 	margin:auto;
+	
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 	height: auto;
@@ -226,3 +229,14 @@ footer nav ul {
     color: white; 
    
 }
+.edit {
+	text-align: center; /* Centrer le texte */
+	background-color: black; /* Couleur de fond noir */
+	color: white; /* Couleur du texte blanche */
+	padding: 10px; /* Ajouter un peu d'espace autour du texte */
+	margin-bottom: 20px; /* Ajouter un espace sous la bannière */
+  }
+.edit a{
+	text-decoration: none;
+	color: white;
+}  
