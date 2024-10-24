@@ -28,7 +28,6 @@ table {
 body {
 	max-width: 1140px;
 	margin:auto;
-	
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 	height: auto;
@@ -240,3 +239,143 @@ footer nav ul {
 	text-decoration: none;
 	color: white;
 }  
+.container h2 {
+    text-align: center; 
+}
+
+.container p {
+    margin-left: 10px; 
+}
+.js-modal-2 {
+	padding-top: 10px;
+}
+.modal-buttons-container{
+	display: flex;
+    justify-content: space-between;
+}
+.js-modal-close {
+    border: none;
+    background-color: white;
+    font-size: 18px;
+}
+.js-modal-back {
+	border: none;
+    background-color: white;
+    font-size: 18px;
+}
+.modal-wrapper h3 {
+    font-size: 18px;
+    text-align: center;
+    display: block;
+    margin-bottom: 40px;
+}
+.modal-gallery {
+    width: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-column-gap: 20px;
+	grid-row-gap: 20px;
+}
+.modal-gallery img {
+	width: 100%;
+}
+.modal-wrapper hr {
+    margin-top: 30px;
+	width: 100%;
+}
+.modal-button-container{
+    display: flex;
+    justify-content: center;
+}
+.add-photo-button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: 1px solid #1D6154;
+    border-radius: 25px;
+    font-family: 'Syne';
+    color: white;
+    cursor: pointer;
+    background-color: #1D6154;
+    width: 250px;
+}
+.image-container {
+	position: relative;
+	display: inline-block;
+  }
+  
+  .image-container img {
+	display: block;
+	width: 100%;
+	height: auto;
+  }
+  
+  .delete-button {
+	position: absolute;
+	top: 8px;   
+	right: 5px; 
+	background-color: black;
+	border: none;
+	padding: 5px;
+	cursor: pointer;
+  }
+  
+  .delete-button i {
+	color: rgb(255, 255, 255); 
+	font-size: 10px; 
+  }
+
+.modal {
+	position: fixed;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0,0,0.8);
+}
+
+.modal-wrapper {
+	overflow: auto;
+	width: 600px;
+	max-width: calc(100vh - 20px);
+	max-height: calc(100vh - 20px);
+	padding: 20px;
+	background-color: white;
+	border-radius: 10px;
+}
+
+.file-section {
+	background-color: #E8F1F6;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 10px;
+}
+
+.file-section label {
+	padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 25px;
+    font-family: 'Syne';
+    color: white;
+    cursor: pointer;
+    background-color: #B9C5CC;
+	color: #306685;
+    width: 170px;
+	text-align: center;
+}
+
+.fa-image {
+	color: #B9C5CC;
+	font-size: 50px;
+	margin-top: 5px;
+}
+
+#photo-container {
+	width: 80%;
+}
+#photo-container img {
+	width: 100%;
+}
