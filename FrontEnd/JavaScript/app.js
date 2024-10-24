@@ -6,6 +6,13 @@ getCategories();
 displayAdminMode();
 handlePictureSubmit();
 
+// Toggle entre les deux modales
+const addPhotoButton = document.querySelector(".add-photo-button");
+const backButton = document.querySelector(".js-modal-back");
+addPhotoButton.addEventListener("click", toggleModal);
+backButton.addEventListener("click", toggleModal);
+
+
 // Fonction pour récupérer et afficher les travaux
 async function getWorks(filter) {
   document.querySelector(".gallery").innerHTML = "";
@@ -94,6 +101,8 @@ function toggleFilter(element) {
 
 // Mode administrateur
 function displayAdminMode() {
+  const editButton = document.querySelector(".js-modal-2"); // Sélectionne le bouton "modifier"
+  
   if (sessionStorage.authToken) {
     const editBanner = document.createElement("div");
     editBanner.className = "edit"; 
@@ -103,7 +112,12 @@ function displayAdminMode() {
     document.querySelector(".log-button").textContent = "logout";
     document.querySelector(".log-button").addEventListener("click", () => {
       sessionStorage.removeItem("authToken");
+      displayAdminMode(); // Réactualiser l'affichage après déconnexion
     });
+
+    editButton.style.display = "block"; // Affiche le bouton si l'utilisateur est connecté
+  } else {
+    editButton.style.display = "none"; // Cache le bouton si l'utilisateur n'est pas connecté
   }
 }
 
@@ -128,7 +142,7 @@ const openModal = function (e) {
 
 const closeModal = function (e) {
   if (!modal) return;
-  e.preventDefault();
+  if (e) e.preventDefault();
   modal.style.display = "none";
   modal.setAttribute("aria-hidden", "true");
   modal.removeAttribute("aria-modal");
@@ -169,14 +183,28 @@ async function deleteWork(event, workId) {
     console.error("Erreur lors de la suppression :", error);
   }
 }
+// Toggle entre les 2 modales
+function toggleModal() {
+  const galleryModal = document.querySelector(".gallery-modal");
+  const addModal = document.querySelector(".add-modal");
 
+  if (
+    galleryModal.style.display === "block" ||
+    galleryModal.style.display === ""
+  ) {
+    galleryModal.style.display = "none";
+    addModal.style.display = "block";
+  } else {
+    galleryModal.style.display = "block";
+    addModal.style.display = "none";
+  }
+}
 // Gestion de l'ajout d'une nouvelle photo
 function handlePictureSubmit() {
+  const img = document.createElement("img");
   const fileInput = document.getElementById("file");
-  const titleInput = document.getElementById("title");
-  const categorySelect = document.getElementById("category");
-
-  let file;
+  let file; // On ajoutera dans cette variable la photo qui a été uploadée.
+  fileInput.style.display = "none";
   fileInput.addEventListener("change", function (event) {
     file = event.target.files[0];
     const maxFileSize = 4 * 1024 * 1024;
@@ -186,57 +214,82 @@ function handlePictureSubmit() {
         alert("La taille de l'image ne doit pas dépasser 4 Mo.");
         return;
       }
-
       const reader = new FileReader();
       reader.onload = (e) => {
-        const img = document.createElement("img");
         img.src = e.target.result;
         img.alt = "Uploaded Photo";
         document.getElementById("photo-container").appendChild(img);
       };
+      // Je converti l'image en une URL de donnees
       reader.readAsDataURL(file);
+      document
+        .querySelectorAll(".picture-loaded") // Pour enlever ce qui se trouvait avant d'upload l'image
+        .forEach((e) => (e.style.display = "none"));
     } else {
       alert("Veuillez sélectionner une image au format JPG ou PNG.");
     }
   });
 
+  const titleInput = document.getElementById("title");
+  let titleValue = "";
+  let selectedValue = "1";
+
+  document.getElementById("category").addEventListener("change", function () {
+    selectedValue = this.value;
+  });
+
+  titleInput.addEventListener("input", function () {
+    titleValue = titleInput.value;
+  });
+
   const addPictureForm = document.getElementById("picture-form");
+
   addPictureForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-
-    if (file && titleInput.value) {
+    const hasImage = document.querySelector("#photo-container").firstChild;
+    if (hasImage && titleValue) {
       const formData = new FormData();
+
       formData.append("image", file);
-      formData.append("title", titleInput.value);
-      formData.append("category", categorySelect.value);
+      formData.append("title", titleValue);
+      formData.append("category", selectedValue);
 
       const token = sessionStorage.authToken;
+
       if (!token) {
-        console.error("Token d'authentification manquant.");
-        return;
+          console.error("Token d'authentification manquant.");
+          return;
       }
 
-      try {
-        const response = await fetch(`${url}/works`, {
+      let response = await fetch(`${url}/works`, {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${token}`,
+              Authorization: "Bearer " + token,
           },
           body: formData,
-        });
-
-        if (response.status === 201) {
-          console.log("Nouveau travail ajouté");
-          getWorks(); // Rafraîchir la galerie
-        } else {
+      });
+      if (response.status !== 201) {
           const errorText = await response.text();
-          console.error("Erreur lors de l'ajout :", errorText);
-        }
-      } catch (error) {
-        console.error("Erreur lors de l'ajout :", error);
+          console.error("Erreur : ", errorText);
+          const errorBox = document.createElement("div");
+          errorBox.className = "error-login";
+          errorBox.innerHTML = `Il y a eu une erreur : ${errorText}`;
+          document.querySelector("form").prepend(errorBox);
+      } else {
+          // Réinitialiser les champs du formulaire après la soumission réussie
+          titleInput.value = ""; 
+          document.getElementById("category").value = "1"; 
+          img.src = ""; 
+          const photoContainer = document.getElementById("photo-container");
+          photoContainer.innerHTML = ""; 
+          document.querySelectorAll(".picture-loaded").forEach((e) => (e.style.display = "block")); 
+
+        
+          getWorks(); 
+          closeModal(); 
       }
-    } else {
-      alert("Veuillez remplir tous les champs.");
-    }
-  });
+  } else {
+      alert("Veuillez remplir tous les champs");
+  }
+});
 }
