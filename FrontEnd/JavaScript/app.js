@@ -69,7 +69,10 @@ function setFigure(data) {
   const deleteButton = document.createElement("button");
   deleteButton.className = "delete-button";
   deleteButton.dataset.id = data.id;
-  deleteButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>'; // On peut utiliser innerHTML ici car ce n'est pas une donnée utilisateur
+
+  const icon = document.createElement("i");
+  icon.className = "fa-solid fa-trash-can";
+  deleteButton.appendChild(icon); // Ajoutez l'icône au bouton
 
   imageContainer.appendChild(modalImg);
   imageContainer.appendChild(deleteButton);
@@ -82,7 +85,6 @@ function setFigure(data) {
   
   document.querySelector(".modal-gallery").appendChild(modalFigure);
 }
-
 
 // Gestion des filtres
 async function getCategories() {
