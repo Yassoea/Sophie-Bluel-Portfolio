@@ -46,51 +46,81 @@ async function getWorks(filter) {
 function setFigure(data) {
   // Galerie principale
   const figure = document.createElement("figure");
-  figure.innerHTML = `<img src=${data.imageUrl} alt=${data.title}>
-                      <figcaption>${data.title}</figcaption>`;
-  document.querySelector(".gallery").append(figure);
+  const img = document.createElement("img");
+  img.src = data.imageUrl; // Assurez-vous que l'URL de l'image est correcte
+  img.alt = data.title;
+
+  const figcaption = document.createElement("figcaption");
+  figcaption.textContent = data.title; // Utilisation de textContent pour éviter les failles XSS
+
+  figure.appendChild(img);
+  figure.appendChild(figcaption);
+  document.querySelector(".gallery").appendChild(figure);
 
   // Galerie dans la modale
   const modalFigure = document.createElement("figure");
-  modalFigure.innerHTML = `
-    <div class="image-container">
-      <img src=${data.imageUrl} alt=${data.title}>
-      <button class="delete-button" data-id="${data.id}">
-        <i class="fa-solid fa-trash-can"></i>
-      </button>
-    </div>
-    <figcaption>${data.title}</figcaption>
-  `;
-  document.querySelector(".modal-gallery").append(modalFigure);
+  const imageContainer = document.createElement("div");
+  imageContainer.className = "image-container";
+
+  const modalImg = document.createElement("img");
+  modalImg.src = data.imageUrl; // Assurez-vous que l'URL de l'image est correcte
+  modalImg.alt = data.title;
+
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "delete-button";
+  deleteButton.dataset.id = data.id;
+  deleteButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>'; // On peut utiliser innerHTML ici car ce n'est pas une donnée utilisateur
+
+  imageContainer.appendChild(modalImg);
+  imageContainer.appendChild(deleteButton);
+
+  const modalFigcaption = document.createElement("figcaption");
+  modalFigcaption.textContent = data.title; // Utilisation de textContent pour éviter les failles XSS
+
+  modalFigure.appendChild(imageContainer);
+  modalFigure.appendChild(modalFigcaption);
+  
+  document.querySelector(".modal-gallery").appendChild(modalFigure);
 }
+
 
 // Gestion des filtres
 async function getCategories() {
-  try {
-    const response = await fetch(`${url}/categories`);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
+    try {
+        const response = await fetch(`${url}/categories`);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
 
-    const categories = await response.json();
-    categories.forEach(category => setFilter(category));
-  } catch (error) {
-    console.error(error.message);
-  }
+        const categories = await response.json();
+
+        // Ajoutez le filtre "Tous" avant d'ajouter les catégories
+        const allFilter = document.getElementById("all");
+        allFilter.addEventListener("click", () => {
+            getWorks(null); // Passer null pour récupérer tous les travaux
+            toggleFilter(allFilter); // Activer visuellement le filtre "Tous"
+        });
+
+        // Ajoutez les filtres de catégories
+        categories.forEach(category => setFilter(category));
+    } catch (error) {
+        console.error(error.message);
+    }
 }
 
 function setFilter(data) {
-  const div = document.createElement("div");
-  div.className = data.id;
-  div.textContent = data.name;
+    const div = document.createElement("div");
+    div.className = "filter"; // Assurez-vous d'ajouter une classe pour le style
+    div.textContent = data.name;
 
-  div.addEventListener("click", () => {
-    getWorks(data.id);
-    toggleFilter(div);
-  });
+    div.addEventListener("click", () => {
+        getWorks(data.id); // Appliquer le filtre par catégorie
+        toggleFilter(div); // Activer le filtre visuellement
+    });
 
-  document.querySelector(".div-container").append(div);
+    document.querySelector(".div-container").append(div);
 }
+
 
 // Activation du filtre visuellement
 function toggleFilter(element) {
@@ -135,7 +165,6 @@ const openModal = function (e) {
   modal.removeAttribute("aria-hidden");
   modal.setAttribute("aria-modal", "true");
   modal.addEventListener("click", closeModal);
-
   modal.querySelectorAll(".js-modal-close").forEach(btn => btn.addEventListener("click", closeModal));
   modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
 };
