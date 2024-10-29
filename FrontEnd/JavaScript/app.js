@@ -15,8 +15,16 @@ backButton.addEventListener("click", toggleModal);
 
 // Fonction pour récupérer et afficher les travaux
 async function getWorks(filter) {
-  document.querySelector(".gallery").innerHTML = "";
-  document.querySelector(".modal-gallery").innerHTML = "";
+  const item = document.querySelector('.gallery')
+  while (item.firstChild) {  
+    item.removeChild(item.firstChild)
+  }
+  
+  const modalitem = document.querySelector('.modal-gallery')
+  while (modalitem.firstChild) {  
+    modalitem.removeChild(modalitem.firstChild)
+  }
+  
 
   try {
     const response = await fetch(`${url}/works`);
@@ -138,20 +146,37 @@ function displayAdminMode() {
   if (sessionStorage.authToken) {
     const editBanner = document.createElement("div");
     editBanner.className = "edit"; 
-    editBanner.innerHTML = '<p><a href="#modal1" class="js-modal"><i class="fa-regular fa-pen-to-square"></i>Mode édition</a></p>';
-    document.body.prepend(editBanner);
+    const paragraph = document.createElement('p');
+    const link = document.createElement('a');
+    link.href = "#modal1";
+    link.classList.add("js-modal");
 
-    document.querySelector(".log-button").textContent = "logout";
-    document.querySelector(".log-button").addEventListener("click", () => {
-      sessionStorage.removeItem("authToken");
-      displayAdminMode(); // Réactualiser l'affichage après déconnexion
-    });
+      // Créez l'icône
+      const icon = document.createElement('i');
+      icon.classList.add("fa-regular", "fa-pen-to-square");
 
-    editButton.style.display = "block"; // Affiche le bouton si l'utilisateur est connecté
-  } else {
-    editButton.style.display = "none"; // Cache le bouton si l'utilisateur n'est pas connecté
-  }
-}
+      // Ajoutez l'icône au lien
+      link.appendChild(icon);
+
+      // Ajoutez le texte au lien
+      link.appendChild(document.createTextNode("Mode édition"));
+
+      // Ajoutez le lien au paragraphe
+      paragraph.appendChild(link);
+      editBanner.appendChild(paragraph); // Ajoute le nouveau contenu
+          document.body.prepend(editBanner);
+
+          document.querySelector(".log-button").textContent = "logout";
+          document.querySelector(".log-button").addEventListener("click", () => {
+            sessionStorage.removeItem("authToken");
+            displayAdminMode(); // Réactualiser l'affichage après déconnexion
+          });
+
+          editButton.style.display = "block"; // Affiche le bouton si l'utilisateur est connecté
+        } else {
+          editButton.style.display = "none"; // Cache le bouton si l'utilisateur n'est pas connecté
+        }
+      }
 
 // Ouverture et fermeture de la modale
 let modal = null;
